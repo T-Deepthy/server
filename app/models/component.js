@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 
 const ComponentSchema = mongoose.Schema({
-    salaryComponent: String,
-    status: Boolean
+    name :{
+        type:String,
+        required: '{PATH} is required!',
+        unique: true
+    },
+    status: Boolean,
 }, {
     timestamps: true
 });

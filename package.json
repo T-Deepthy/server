@@ -3,17 +3,17 @@
   "version": "1.0.0",
   "description": "To manage salary slip.",
   "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
     "Express",
     "RestAPI",
     "MongoDB",
     "Mongoose",
-    "Notes"
+    "Salaryslip"
   ],
-  "author": "callicoder",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "tdeepthy",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.3",

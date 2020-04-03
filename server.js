@@ -31,7 +31,10 @@ app.get('/', (req, res) => {
     res.json({"message": "Welcome to Eaze accounts"});
 });
 
-require('./app/routes/component.routes.js')(app);
+require('./app/routes/component.js')(app);
+require('./app/routes/designation.js')(app);
+require('./app/routes/employee.js')(app);
+
 
 // listen for requests
 app.listen(8080, () => {

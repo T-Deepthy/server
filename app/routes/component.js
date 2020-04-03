@@ -1,5 +1,5 @@
 module.exports = (app) => {
-    const components = require('../controllers/component.controller.js');
+    const components = require('../controllers/component.js');
 
     // Create a new component
     app.post('/components', components.create);

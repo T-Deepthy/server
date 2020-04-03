@@ -1,4 +1,4 @@
-const Component = require('../models/component.model.js');
+const Component = require('../models/component.js');
 
 // Create and Save a new Component
 exports.create = (req, res) => {
@@ -10,10 +10,7 @@ exports.create = (req, res) => {
     }
 
     // Create a Component
-    const component = new Component({
-        salaryComponent: req.body.salaryComponent || "Untitled Component", 
-        status: req.body.status
-    });
+    const component = new Component(req.body);
 
     // Save Component in the database
     component.save()
@@ -70,10 +67,7 @@ exports.update = (req, res) => {
     }
 
     // Find Component and update it with the request body
-    Component.findByIdAndUpdate(req.params.componentId, {
-        salaryComponent: req.body.salaryComponent || "Untitled Component",
-        status: req.body.status
-    }, {new: true})
+    Component.findByIdAndUpdate(req.params.componentId, req.body, {new: true})
     .then(component => {
         if(!component) {
             return res.status(404).send({
