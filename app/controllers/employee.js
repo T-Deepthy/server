@@ -1,5 +1,7 @@
 const Employee = require('../models/employee.js');
 const Designation = require('../models/designation.js');
+const Component = require('../models/component.js');
+
 
 // Create and Save a new employee
 exports.create = async (req, res) => {
@@ -94,3 +96,37 @@ exports.delete = (req, res) => {
         });
 };
 
+// generate payslip
+
+exports.payslip = async (req, res) => {
+    try {
+        
+        const employee = await Employee.findById(req.params.employeeId);
+        const designation = await Designation.findById(employee.designation);
+        const salarySlip = { salaryComponents: [],
+            name: "Employee Name",
+            empNo: employee.empNo,
+            designation: designation.name,
+            CTC: employee.CTC
+        };
+        await getSalaryComponents(designation.components, employee).then(data => {
+            salarySlip.salaryComponents = data;
+        })
+        res.send(salarySlip);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+const computeSalary = async (comp, employee) => {
+    const component = await Component.findById(comp._id);
+    const salaryComponent = {
+        name: component.name,
+        value: employee.CTC * 0.01 * comp.percentageCTC
+    };
+    return Promise.resolve(salaryComponent);
+}
+
+const getSalaryComponents = async (components, employee) => {
+    return Promise.all(components.map(component => computeSalary(component, employee)))
+}

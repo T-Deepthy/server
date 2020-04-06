@@ -15,4 +15,8 @@ module.exports = (app) => {
 
     // Delete a employee with employeeId
     app.delete('/employees/:employeeId', employees.delete);
+
+    //generate salaryslip
+    app.get('/employees/:employeeId/payslip', employees.payslip);
+
 }
