@@ -17,8 +17,10 @@ exports.create = async (req, res) => {
 // Retrieve and return all Designation from the database.
 exports.findAll = (req, res) => {
     Designation.find()
-        .then(designations => {
-            res.send(designations);
+        .then(async designations => {
+            await populateSalaryComponents(designations).then(data => {
+                res.send(data);
+            })
         }).catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving designations."
@@ -94,3 +96,22 @@ exports.delete = (req, res) => {
         });
 };
 
+const fetchComponent = async (comp) => {
+    const component = await Component.findById(comp._id);
+    const { name } = component;
+    const { _doc } = comp;
+    return Promise.resolve({ name, ..._doc });
+}
+
+const populateComponentName = async (components) => {
+    return Promise.all(components.map(comp => fetchComponent(comp)))
+}
+
+const populateSalaryComponents = async (designations) => {
+    return Promise.all(designations.map(async designation => {
+        return await populateComponentName(designation.components).then(data => {
+            const { _doc } = designation;
+            return Promise.resolve({ ..._doc, components: data });
+        });
+    }));
+}
