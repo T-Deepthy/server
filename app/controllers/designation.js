@@ -5,8 +5,10 @@ const Component = require('../models/component.js');
 exports.create = async (req, res) => {
     const designation = new Designation(req.body);
     designation.save()
-        .then(data => {
-            res.send(data);
+        .then(async designation => {
+            await populateComponentName(designation.components).then(data => {
+                res.send({ ...designation._doc, components: data });
+            })
         }).catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while creating the Designation."
@@ -55,13 +57,15 @@ exports.update = (req, res) => {
 
     // Find Designation and update it with the request body
     Designation.findByIdAndUpdate(req.params.designationId, req.body, { new: true })
-        .then(designation => {
+        .then(async designation => {
             if (!designation) {
                 return res.status(404).send({
                     message: "Designation not found with id " + req.params.designationId
                 });
             }
-            res.send(designation);
+            await populateComponentName(designation.components).then(data => {
+                res.send({ ...designation._doc, components: data });
+            })
         }).catch(err => {
             if (err.kind === 'ObjectId') {
                 return res.status(404).send({
@@ -99,8 +103,7 @@ exports.delete = (req, res) => {
 const fetchComponent = async (comp) => {
     const component = await Component.findById(comp._id);
     const { name } = component;
-    const { _doc } = comp;
-    return Promise.resolve({ name, ..._doc });
+    return Promise.resolve({ name, ...comp._doc });
 }
 
 const populateComponentName = async (components) => {
@@ -110,8 +113,7 @@ const populateComponentName = async (components) => {
 const populateSalaryComponents = async (designations) => {
     return Promise.all(designations.map(async designation => {
         return await populateComponentName(designation.components).then(data => {
-            const { _doc } = designation;
-            return Promise.resolve({ ..._doc, components: data });
+            return Promise.resolve({ ...designation._doc, components: data });
         });
     }));
 }
