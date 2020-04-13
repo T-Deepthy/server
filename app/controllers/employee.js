@@ -19,13 +19,10 @@ exports.create = async (req, res) => {
 // Retrieve and return all employee from the database.
 exports.findAll = (req, res) => {
     Employee.find()
-        .then(employees => {
-            res.send(employees);
-        }).catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while retrieving employees."
-            });
-        });
+    .populate("designation")
+    .exec((err, designation) => { 
+            res.send(designation);
+        })
 };
 
 // Find a single employee with a employeeId

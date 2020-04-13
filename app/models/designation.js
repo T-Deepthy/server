@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const DesignationSchema = mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: '{PATH} is required!',
+        unique: true
+    },
     components: [
         {
             component: { type: mongoose.Schema.Types.ObjectId, ref: 'Component' },
