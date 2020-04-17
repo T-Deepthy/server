@@ -9,7 +9,10 @@ const DesignationSchema = mongoose.Schema({
     components: [
         {
             component: { type: mongoose.Schema.Types.ObjectId, ref: 'Component' },
-            percentageCTC: Number
+            percentageCTC: {
+                type:Number,
+                required: '{PATH} is required!',
+            }
         }
     ]
 }, {

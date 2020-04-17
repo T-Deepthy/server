@@ -6,7 +6,10 @@ const ComponentSchema = mongoose.Schema({
         required: '{PATH} is required!',
         unique: true
     },
-    status: Boolean,
+    status: {
+        type:Boolean,
+        required: '{PATH} is required!',
+    },
 }, {
     timestamps: true
 });
