@@ -52,23 +52,10 @@ exports.update = (req, res) => {
 
     // Find employee and update it with the request body
     Employee.findByIdAndUpdate(req.params.employeeId, req.body, { new: true })
-        .then(employee => {
-            if (!employee) {
-                return res.status(404).send({
-                    message: "employee not found with id " + req.params.employeeId
-                });
-            }
-            res.send(employee);
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).send({
-                    message: "employee not found with id " + req.params.employeeId
-                });
-            }
-            return res.status(500).send({
-                message: "Error updating employee with id " + req.params.employeeId
-            });
-        });
+    .populate("designation")
+    .exec((err, designation) => { 
+            res.send(designation);
+        })
 };
 
 // Delete a employee with the specified employeeId in the request
