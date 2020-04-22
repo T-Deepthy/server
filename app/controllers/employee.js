@@ -5,17 +5,11 @@ const Component = require('../models/component.js');
 
 // Create and Save a new employee
 exports.create = async (req, res) => {
-    const employee = new Employee(req.body);
-    employee.save()
-        .then(data => {
-            res.send(data);
-        }).catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the employee."
-            });
-        });
-};
-
+      const emp = await Employee.create(req.body);
+      Employee.populate(emp, "designation", function(error, employee) {
+        res.send(employee);
+      });
+  };
 // Retrieve and return all employee from the database.
 exports.findAll = (req, res) => {
     Employee.find()
