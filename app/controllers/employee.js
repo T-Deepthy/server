@@ -82,6 +82,7 @@ exports.payslip = async (req, res) => {
         const employee = await Employee.findById(req.params.employeeId);
         const designation = await Designation.findById(employee.designation);
         const salarySlip = { salaryComponents: [],
+            empName: employee.empName,
             empNo: employee.empNo,
             designation: designation.name,
             CTC: employee.CTC
