@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const EmployeeSchema = mongoose.Schema({
+    empName:{
+        type:String,
+        required: '{PATH} is required!',
+        unique: true
+    },
     empNo:{
         type:String,
         required: '{PATH} is required!',
