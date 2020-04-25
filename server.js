@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/salary-slip-app
 
 // define a simple route
 app.get('/', (req, res) => {
-    res.json({"message": "Welcome to Eaze accounts"});
+    res.json({"message": "Welcome"});
 });
 
 require('./app/routes/component.js')(app);
