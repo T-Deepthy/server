@@ -2,25 +2,21 @@ const Component = require('../models/component.js');
 
 // Create and Save a new Component
 exports.create = (req, res) => {
-    // Validate request
-    if(!req.body.status) {
-        return res.status(400).send({
-            message: "Component content can not be empty"
-        });
-    }
-
-    // Create a Component
     const component = new Component(req.body);
-
-    // Save Component in the database
+    if(typeof(req.body.status)==="boolean")
     component.save()
     .then(data => {
         res.send(data);
     }).catch(err => {
         res.status(500).send({
-            message: err.message || "Some error occurred while creating the Component."
+            message: err.message
         });
     });
+    else   {
+        return res.status(400).send({
+            message: "Status should be boolean value"
+        });
+    }
 };
 
 // Retrieve and return all Components from the database.
@@ -60,7 +56,7 @@ exports.findOne = (req, res) => {
 // Update a Component identified by the componentId in the request
 exports.update = (req, res) => {
     // Validate Request
-    if(!req.body.status) {
+    if(typeof(req.body.status)==="string") {
         return res.status(400).send({
             message: "Component content can not be empty"
         });
